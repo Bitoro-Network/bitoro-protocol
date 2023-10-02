@@ -1,0 +1,280 @@
+{
+  "ProxyAdmin": {
+    "type": "preset",
+    "name": "ProxyAdmin",
+    "address": "0x855E99F768FaD76DD0d3EB7c446C0b759C96D520"
+  },
+  "MultiSignAdmin": {
+    "type": "preset",
+    "name": "MultiSignAdmin",
+    "address": "0x8564C77261094Abeee6d60a26d40f8DBAF23Fc94"
+  },
+  "WrappedNative": {
+    "type": "preset",
+    "name": "WrappedNative",
+    "address": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7"
+  },
+  "PeggedUsdc": {
+    "type": "preset",
+    "name": "PeggedUsdc",
+    "address": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E"
+  },
+  "PeggedUsdcE": {
+    "type": "preset",
+    "name": "PeggedUsdcE",
+    "address": "0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664"
+  },
+  "PeggedUsdt": {
+    "type": "preset",
+    "name": "PeggedUsdt",
+    "address": "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7"
+  },
+  "PeggedUsdtE": {
+    "type": "preset",
+    "name": "PeggedUsdtE",
+    "address": "0xc7198437980c041c805A1EDcbA50c1Ce5db95118"
+  },
+  "PeggedDai": {
+    "type": "preset",
+    "name": "PeggedDai",
+    "address": "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70"
+  },
+  "PeggedEth": {
+    "type": "preset",
+    "name": "PeggedEth",
+    "address": "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB"
+  },
+  "PeggedBtc": {
+    "type": "preset",
+    "name": "PeggedBtc",
+    "address": "0x50b7545627a5162F82A992c33b87aDc75187B218"
+  },
+  "PeggedMlp": {
+    "type": "preset",
+    "name": "PeggedMlp",
+    "address": "0xAf2D365e668bAaFEdcFd256c0FBbe519e594E390"
+  },
+  "PeggedBitoroUsd": {
+    "type": "preset",
+    "name": "PeggedBitoroUsd",
+    "address": "0xEA4B1b0aa3C110c55f650d28159Ce4AD43a4a58b"
+  },
+  "PeggedBitoroEth": {
+    "type": "preset",
+    "name": "PeggedBitoroEth",
+    "address": "0xDE53842F87c95362B2912DB5dBBA404E7D5Ff842"
+  },
+  "PeggedBitoroBtc": {
+    "type": "preset",
+    "name": "PeggedBitoroBtc",
+    "address": "0xCd7D33c265c811ee12c956D28c0e91f32a65119d"
+  },
+  "PeggedBitoroAvax": {
+    "type": "preset",
+    "name": "PeggedBitoroAvax",
+    "address": "0xaC80096d53c5965D9432592D28687C521472b9EB"
+  },
+  "PeggedBitoroBnb": {
+    "type": "preset",
+    "name": "PeggedBitoroBnb",
+    "address": "0x30a667dF8562a2460F45AC297D833a36FEaC0C2F"
+  },
+  "PeggedBitoroFtm": {
+    "type": "preset",
+    "name": "PeggedBitoroFtm",
+    "address": "0x70D30270ccC356f47E5782a1A905ea85B9E08CEa"
+  },
+  "LiquidityPoolHop1__implementation": {
+    "type": "plain",
+    "name": "LiquidityPoolHop1__implementation",
+    "address": "0x3d44Efa23A531fae02d8DaF9eE8dAAac61d66475",
+    "deployedAt": 19532402
+  },
+  "LiquidityPool": {
+    "type": "upgradeable",
+    "name": "LiquidityPool",
+    "address": "0x0bA2e492e8427fAd51692EE8958eBf936bEE1d84",
+    "dependencies": {
+      "admin": "0x855E99F768FaD76DD0d3EB7c446C0b759C96D520",
+      "implementation": "0x35923D08A9862a984E9f051d6DB5FC8fFA2C6D30"
+    },
+    "deployedAt": 14304145
+  },
+  "LiquidityPoolHop2": {
+    "type": "plain",
+    "name": "LiquidityPoolHop2",
+    "address": "0x68533BaF16252d1E6b8Af6d04655d5AFD7a30870",
+    "deployedAt": 19532329
+  },
+  "OrderBook": {
+    "type": "upgradeable",
+    "name": "OrderBook",
+    "address": "0x5898c3E218a8501533d771C86e2fA37743ea2aDd",
+    "dependencies": {
+      "admin": "0x855E99F768FaD76DD0d3EB7c446C0b759C96D520",
+      "implementation": "0x533b9ecff336F449B526C03BFE6188c5e3B9FBfD"
+    }
+  },
+  "LiquidityManager__implementation": {
+    "type": "plain",
+    "name": "LiquidityManager__implementation",
+    "address": "0x9D4A8d7523a36f4a2E99870f1aFf232ded7e95Ae",
+    "deployedAt": 17612690
+  },
+  "LiquidityManager": {
+    "type": "upgradeable",
+    "name": "LiquidityManager",
+    "address": "0x28f16eB86481066Bf63BcBEB05C8474f7120A36C",
+    "dependencies": {
+      "admin": "0x855E99F768FaD76DD0d3EB7c446C0b759C96D520",
+      "implementation": "0x9D4A8d7523a36f4a2E99870f1aFf232ded7e95Ae"
+    }
+  },
+  "PeggedBusdE": {
+    "type": "preset",
+    "name": "PeggedBusdE",
+    "address": "0x19860CCB0A68fd4213aB9D8266F7bBf05A8dDe98"
+  },
+  "WETH9": {
+    "type": "preset",
+    "name": "WETH9",
+    "address": "0xB47e6A5f8b33b3F17603C83a0535A9dcD7E32681"
+  },
+  "traderJoeFarm": {
+    "type": "plain",
+    "name": "traderJoeFarm",
+    "address": "0x01d16F922dFf39dFBC5Cb217B6f029B276cB1773",
+    "deployedAt": 14587125
+  },
+  "TransferModule": {
+    "type": "plain",
+    "name": "TransferModule",
+    "address": "0x75e5CCdE81746b6C017B797EaDfAccc3b56ACfCb",
+    "deployedAt": 14588323
+  },
+  "traderJoeFarmDebug": {
+    "type": "plain",
+    "name": "traderJoeFarmDebug",
+    "address": "0xE4F135f63f0728f903De89c03066b285E8fA4570",
+    "deployedAt": 14589864
+  },
+  "NativeUnwrapper": {
+    "type": "plain",
+    "name": "NativeUnwrapper",
+    "address": "0xc294bFc63be5C3663A9eDE426f41d317701a17A7",
+    "deployedAt": 14633082
+  },
+  "OrderBook__implementation": {
+    "type": "plain",
+    "name": "OrderBook__implementation",
+    "address": "0x533b9ecff336F449B526C03BFE6188c5e3B9FBfD",
+    "deployedAt": 19262169
+  },
+  "LibOrderBook": {
+    "type": "plain",
+    "name": "LibOrderBook",
+    "address": "0x86fC1C12CB871c61B6DBb9c2383B372db8317e5E",
+    "deployedAt": 19262169
+  },
+  "Vault__implementation": {
+    "type": "plain",
+    "name": "Vault__implementation",
+    "address": "0x7a1AE37F17269dD604EA291E87A3064Ac97f27C5",
+    "deployedAt": 16452348
+  },
+  "Vault": {
+    "type": "upgradeable",
+    "name": "Vault",
+    "address": "0x29a28cC3FdC128693ef6a596eF45c43ff63B7062",
+    "dependencies": {
+      "admin": "0x855E99F768FaD76DD0d3EB7c446C0b759C96D520",
+      "implementation": "0x7a1AE37F17269dD604EA291E87A3064Ac97f27C5"
+    },
+    "deployedAt": 16452350
+  },
+  "TraderJoe": {
+    "type": "plain",
+    "name": "TraderJoe",
+    "address": "0xe6006167d82B59bcA33e3CE2688F79eddA5cF8fF",
+    "deployedAt": 16312362
+  },
+  "TraderJoeFarm": {
+    "type": "plain",
+    "name": "TraderJoeFarm",
+    "address": "0x05A890993E6b031794cE54F9395b7F4322dfDb13",
+    "deployedAt": 16312403
+  },
+  "ReceiveAssets": {
+    "type": "plain",
+    "name": "ReceiveAssets",
+    "address": "0x91862632e3C922de44200F59a5d6892eDb4f6153",
+    "deployedAt": 17600138
+  },
+  "CelerBridge": {
+    "type": "plain",
+    "name": "CelerBridge",
+    "address": "0x5A96f91Df86219507c38D0Fc52CD7825d97BA414",
+    "deployedAt": 24707560
+  },
+  "WithdrawAsset": {
+    "type": "plain",
+    "name": "WithdrawAsset",
+    "address": "0x51e3dD0bCfECBd8371691B6BfDDD92091371a7F6",
+    "deployedAt": 17054446
+  },
+  "BitoroTimelock__implementation": {
+    "type": "plain",
+    "name": "BitoroTimelock__implementation",
+    "address": "0x973db3142aa601ef11c1C8148e6EA8e7A4eE6B07",
+    "deployedAt": 17662087
+  },
+  "BitoroTimelock": {
+    "type": "upgradeable",
+    "name": "BitoroTimelock",
+    "address": "0xe013756fE041c524F0583e644fFC00Ed13bdc938",
+    "dependencies": {
+      "admin": "0x855E99F768FaD76DD0d3EB7c446C0b759C96D520",
+      "implementation": "0x973db3142aa601ef11c1C8148e6EA8e7A4eE6B07"
+    },
+    "deployedAt": 17662091
+  },
+  "Rebalancer": {
+    "type": "plain",
+    "name": "SafeOwnable",
+    "address": "0xdF88Fe94EF674D8c1ab1743AD88717E7AE893a44",
+    "deployedAt": 18755590
+  },
+  "ReferralManager__implementation": {
+    "type": "plain",
+    "name": "ReferralManager__implementation",
+    "address": "0x127963cD8253bb54c19E266e5EcC6bad8d30a96E",
+    "deployedAt": 19307871
+  },
+  "ReferralManager": {
+    "type": "upgradeable",
+    "name": "ReferralManager",
+    "address": "0x1444edF22cd6C891391f3644b435eF6b8270C4B0",
+    "dependencies": {
+      "admin": "0x73c5955dbB7a667e05da5fE7b8798c0fd4cE8E16",
+      "implementation": "0x127963cD8253bb54c19E266e5EcC6bad8d30a96E"
+    },
+    "deployedAt": 19307875
+  },
+  "LibLiquidity": {
+    "type": "plain",
+    "name": "LibLiquidity",
+    "address": "0x687d05435489aaa3f437799e55ba3ab33122a7be",
+    "deployedAt": 22980779
+  },
+  "PeggedBitoroOp": {
+    "type": "preset",
+    "name": "PeggedBitoroOp",
+    "address": "0xE80e0B928F8f3024dfeFa56E7608bC3bAF389881"
+  },
+  "Reader": {
+    "type": "plain",
+    "name": "Reader",
+    "address": "0xCE443B8c1C3E3edb3b9F3B2B482FaaC09A95B01d",
+    "deployedAt": 27455588
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "ProxyAdmin": {
+    "type": "preset",
+    "name": "ProxyAdmin",
+    "address": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A"
+  },
+  "MultiSignAdmin": {
+    "type": "preset",
+    "name": "MultiSignAdmin",
+    "address": "0x029A4A97e892e7270d9B3B90bFEF95599BC6BfD6"
+  },
+  "WETH9": {
+    "type": "preset",
+    "name": "WETH9",
+    "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+  },
+  "ERC20PresetMinterPauserUpgradeable__implementation": {
+    "type": "plain",
+    "name": "ERC20PresetMinterPauserUpgradeable__implementation",
+    "address": "0x2a62979197208da0430f732Cf353f6EA7Ad75337",
+    "deployedAt": 9826483
+  },
+  "MlpToken__implementation": {
+    "type": "plain",
+    "name": "MlpToken__implementation",
+    "address": "0x085F5B8945426Aa5e8239CD172070d0301Fe33BA",
+    "deployedAt": 9826501
+  },
+  "Mlp": {
+    "type": "upgradeable",
+    "name": "Mlp",
+    "address": "0x7CbaF5a14D953fF896E5B3312031515c858737C8",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0x085F5B8945426Aa5e8239CD172070d0301Fe33BA"
+    },
+    "deployedAt": 9826504
+  },
+  "BitoroToken__implementation": {
+    "type": "plain",
+    "name": "BitoroToken__implementation",
+    "address": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B",
+    "deployedAt": 9826510
+  },
+  "BitoroUsd": {
+    "type": "upgradeable",
+    "name": "BitoroUsd",
+    "address": "0x458cd4Bd5ae8FCF602a910423C30323997E497c3",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 9826513
+  },
+  "BitoroEth": {
+    "type": "upgradeable",
+    "name": "BitoroEth",
+    "address": "0xE03b9Bf45B8b717237380AB934C5A6a5CA4C2Af1",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 9826517
+  },
+  "BitoroBtc": {
+    "type": "upgradeable",
+    "name": "BitoroBtc",
+    "address": "0x2aC61dd4fBb11919b20A3859D4dDc4Fa192c8ba1",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 9826520
+  },
+  "BitoroAvax": {
+    "type": "upgradeable",
+    "name": "BitoroAvax",
+    "address": "0xd8d05915cf0AccBBBa78720707920Aff6eef3943",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 9826529
+  },
+  "BitoroBnb": {
+    "type": "upgradeable",
+    "name": "BitoroBnb",
+    "address": "0xdd3CF6B0182993eced98fD71962dfA18E2eae2E4",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 9826531
+  },
+  "BitoroFtm": {
+    "type": "upgradeable",
+    "name": "BitoroFtm",
+    "address": "0x198F152D3F34cb49A926333cD935D864D398753F",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 9826533
+  },
+  "USDCE": {
+    "type": "preset",
+    "name": "USDC.e",
+    "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+  },
+  "USDT": {
+    "type": "preset",
+    "name": "USDT",
+    "address": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
+  },
+  "DAI": {
+    "type": "preset",
+    "name": "DAI",
+    "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"
+  },
+  "WBTC": {
+    "type": "preset",
+    "name": "WBTC",
+    "address": "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
+  },
+  "FTM": {
+    "type": "preset",
+    "name": "FTM",
+    "address": "0xd42785D323e608B9E99fa542bd8b1000D4c2Df37"
+  },
+  "LiquidityPoolHop1__implementation": {
+    "type": "plain",
+    "name": "LiquidityPoolHop1__implementation",
+    "address": "0x7e698E4Cc847d338bF836f2Cd3db0f13A8F0BE36",
+    "deployedAt": 22819617
+  },
+  "LiquidityPool": {
+    "type": "upgradeable",
+    "name": "LiquidityPool",
+    "address": "0x3e0199792Ce69DC29A0a36146bFa68bd7C8D6633",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0x245BA1e19e7a15dd903B6b9B2705d4BF308F481c"
+    },
+    "deployedAt": 11242780
+  },
+  "LiquidityPoolHop2": {
+    "type": "plain",
+    "name": "LiquidityPoolHop2",
+    "address": "0xBa7d2bc8d6d19964A487060b4E47825C0436d6B2",
+    "deployedAt": 22819250
+  },
+  "OrderBook__implementation": {
+    "type": "plain",
+    "name": "OrderBook__implementation",
+    "address": "0x24A7a1428D9FC94e7c7ced065F7c09cAd07CA532",
+    "deployedAt": 106326052
+  },
+  "OrderBook": {
+    "type": "upgradeable",
+    "name": "OrderBook",
+    "address": "0xa19fD5aB6C8DCffa2A295F78a5Bb4aC543AAF5e3",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0x1BD879CdC0fd7E7192E78c07157D0c29abbD7feE"
+    },
+    "deployedAt": 11242808
+  },
+  "LiquidityManager__implementation": {
+    "type": "plain",
+    "name": "LiquidityManager__implementation",
+    "address": "0xcd5daf9cF3CCa8Ff41Effd74D9437C432b31C358",
+    "deployedAt": 18191479
+  },
+  "LiquidityManager": {
+    "type": "upgradeable",
+    "name": "LiquidityManager",
+    "address": "0x02FAe054ACD7FB1615471319c4E3029DFbC2B23C",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcd5daf9cF3CCa8Ff41Effd74D9437C432b31C358"
+    },
+    "deployedAt": 11242818
+  },
+  "BUSD": {
+    "type": "preset",
+    "name": "BUSD",
+    "address": "0x31190254504622cEFdFA55a7d3d272e6462629a2"
+  },
+  "NativeUnwrapper": {
+    "type": "plain",
+    "name": "NativeUnwrapper",
+    "address": "0x9DE8733589921CF203e703d9e4330e83162AEc33",
+    "deployedAt": 11966616
+  },
+  "Vault__implementation": {
+    "type": "plain",
+    "name": "Vault__implementation",
+    "address": "0x33261B56d71d8AF545aFcf255779149788CeeD62",
+    "deployedAt": 15618223
+  },
+  "Vault": {
+    "type": "upgradeable",
+    "name": "Vault",
+    "address": "0x917952280770Daa800E1B4912Ea08450Bf71d57e",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0x33261B56d71d8AF545aFcf255779149788CeeD62"
+    },
+    "deployedAt": 15618234
+  },
+  "Curve3PoolFarm": {
+    "type": "plain",
+    "name": "Curve3PoolFarm",
+    "address": "0x711008Ae10FE1257789F1A686378Defbf5cc389F",
+    "deployedAt": 16536405
+  },
+  "Curve2PoolFarm": {
+    "type": "plain",
+    "name": "Curve2PoolFarm",
+    "address": "0x6C370965Eb8eE7552E07625C2F4806E126483222",
+    "deployedAt": 16537022
+  },
+  "CelerBridge": {
+    "type": "plain",
+    "name": "CelerBridge",
+    "address": "0x3825259bCDD54ae308462C25291BD4f80776dE4e",
+    "deployedAt": 51775109
+  },
+  "ReceiveAssets": {
+    "type": "plain",
+    "name": "ReceiveAssets",
+    "address": "0x11687644c4E0F292f65bAb6776490cFA5D00EaF1",
+    "deployedAt": 18163467
+  },
+  "BitoroTimelock__implementation": {
+    "type": "plain",
+    "name": "BitoroTimelock__implementation",
+    "address": "0x965A4597258F0cbb57B513846e0D89109300D7C5",
+    "deployedAt": 18300180
+  },
+  "BitoroTimelock": {
+    "type": "upgradeable",
+    "name": "BitoroTimelock",
+    "address": "0xc2D28778447B1B0B2Ae3aD17dC6616b546FBBeBb",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0x965A4597258F0cbb57B513846e0D89109300D7C5"
+    },
+    "deployedAt": 18300188
+  },
+  "POL__implementation": {
+    "type": "plain",
+    "name": "POL__implementation",
+    "address": "0x14D1e8ACe06005f8abE4E0d526c93Dca284D5cF3",
+    "deployedAt": 56266117
+  },
+  "POL": {
+    "type": "upgradeable",
+    "name": "POL",
+    "address": "0x18891480b9dd2aC5eF03220C45713d780b5CFdeF",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0x338097e546106ca0cD53ED2C7dA1bfcdF4eE9c3e"
+    },
+    "deployedAt": 18754134
+  },
+  "Rebalancer": {
+    "type": "plain",
+    "name": "SafeOwnable",
+    "address": "0x3EfE4639eb082e22209fee29aAbaf14Ade5bF82B",
+    "deployedAt": 18755590
+  },
+  "ReferralManager__implementation": {
+    "type": "plain",
+    "name": "ReferralManager__implementation",
+    "address": "0xb90FE34008CCECE311dF043E64D4e330741f6d21",
+    "deployedAt": 21953365
+  },
+  "ReferralManager": {
+    "type": "upgradeable",
+    "name": "ReferralManager",
+    "address": "0xa68d96F26112377abdF3d6b9fcde9D54f2604C2a",
+    "dependencies": {
+      "admin": "0x73c5955dbB7a667e05da5fE7b8798c0fd4cE8E16",
+      "implementation": "0xb90FE34008CCECE311dF043E64D4e330741f6d21"
+    },
+    "deployedAt": 21953375
+  },
+  "Disperse__implementation": {
+    "type": "plain",
+    "name": "Disperse__implementation",
+    "address": "0x9e9f9B289B711209Db5A5dFEDeB1b06B5f5d978A",
+    "deployedAt": 21953403
+  },
+  "Disperse": {
+    "type": "upgradeable",
+    "name": "Disperse",
+    "address": "0x39A6567C3E01d28c37403c8782DE78490D9204fA",
+    "dependencies": {
+      "admin": "0x73c5955dbB7a667e05da5fE7b8798c0fd4cE8E16",
+      "implementation": "0x9e9f9B289B711209Db5A5dFEDeB1b06B5f5d978A"
+    },
+    "deployedAt": 21953424
+  },
+  "LibLiquidity": {
+    "type": "plain",
+    "name": "LibLiquidity",
+    "address": "0xDBf711edf1f26642c90E467e8a06A560Fe9F5C45",
+    "deployedAt": 9826501
+  },
+  "BitoroOp": {
+    "type": "upgradeable",
+    "name": "BitoroOp",
+    "address": "0x854CF75e51782dE84478B1518543920f35a13eaE",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 44242976
+  },
+  "Bitoro": {
+    "type": "plain",
+    "name": "Bitoro",
+    "address": "0x8BB2Ac0DCF1E86550534cEE5E9C8DED4269b679B",
+    "deployedAt": 42074306
+  },
+  "Reader": {
+    "type": "plain",
+    "name": "Reader",
+    "address": "0xF64B4bD682E792e0BA78956B86F2Cee946d2E7D6",
+    "deployedAt": 69956849
+  },
+  "ARB": {
+    "type": "preset",
+    "name": "ARB",
+    "address": "0x912CE59144191C1204E64559FE8253a0e49E6548"
+  },
+  "BitoroArb": {
+    "type": "upgradeable",
+    "name": "BitoroArb",
+    "address": "0x467031781774FB80875dAe9103dBE637695B4AE6",
+    "dependencies": {
+      "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",
+      "implementation": "0xcCD84810375992d7E19d1529150B1B29eA2EfF6B"
+    },
+    "deployedAt": 71969796
+  },
+  "LibOrderBook": {
+    "type": "plain",
+    "name": "LibOrderBook",
+    "address": "0x1Be0CBC495050c95Cfd3629f029533A0a2e6d0Ff",
+    "deployedAt": 106326038
+  }
+}
