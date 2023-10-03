@@ -10,7 +10,7 @@ import { Vault } from "../typechain/Vault"
 const keeperAddress = "0xc6b1458fcc02abc7f3d912fa60c7fb59c957fbf0"
 
 const CHAIN_ID = {
-  arbRinkeby: 421611,
+  arbGoerli: 421613,
   fantomTestnet: 0xfa2,
   bscTestnet: 0x61,
   avalancheTestnet: 43113,

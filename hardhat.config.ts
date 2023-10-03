@@ -58,8 +58,8 @@ module.exports = {
       blockGasLimit: "80000000",
       accounts: [],
     },
-    arbrinkeby: {
-      url: `https://rinkeby.arbitrum.io/rpc`,
+    arbGoerli: {
+      url: `https://arb-goerli.g.alchemy.com/v2/2mNlhhYJxcMYdgUWZU7gx9yFZ8ZOmyz_`,
       // gasPrice: 5e9,
       blockGasLimit: "80000000",
       accounts: [],
