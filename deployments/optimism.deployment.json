@@ -39,9 +39,9 @@
     "name": "PeggedOp",
     "address": "0x4200000000000000000000000000000000000042"
   },
-  "PeggedMlp": {
+  "PeggedBlp": {
     "type": "preset",
-    "name": "PeggedMlp",
+    "name": "PeggedBlp",
     "address": "0x0509474f102b5cd3f1f09e1E91feb25938eF0f17"
   },
   "PeggedBitoroUsd": {

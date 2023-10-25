@@ -12,7 +12,7 @@ contract LiquidityPoolHop1 is Storage, Trade, Getter, Proxy {
 
     function initialize(
         address nextHop,
-        address mlp,
+        address blp,
         address orderBook,
         address weth,
         address nativeUnwrapper,
@@ -21,7 +21,7 @@ contract LiquidityPoolHop1 is Storage, Trade, Getter, Proxy {
         __SafeOwnable_init();
 
         ChainedProxy.replace(nextHop);
-        _storage.mlp = mlp;
+        _storage.blp = blp;
         _storage.orderBook = orderBook;
         _storage.weth = weth;
         _storage.nativeUnwrapper = nativeUnwrapper;

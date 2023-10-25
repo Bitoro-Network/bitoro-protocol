@@ -45,8 +45,8 @@ contract MockLiquidityPool is ILiquidityPool {
             // [6] sequence. note: will be 0 after 0xffffffff
             // [7] strictStableDeviation
             uint32[8] memory u32s,
-            // [0] mlpPriceLowerBound
-            // [1] mlpPriceUpperBound
+            // [0] blpPriceLowerBound
+            // [1] blpPriceUpperBound
             uint96[2] memory u96s
         )
     {}
@@ -94,17 +94,17 @@ contract MockLiquidityPool is ILiquidityPool {
         uint8 tokenId,
         uint256 rawAmount, // NOTE: OrderBook SHOULD transfer rawAmount collateral to LiquidityPool
         uint96 tokenPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
     ) external returns (uint96) {}
 
     function removeLiquidity(
         address trader,
-        uint96 mlpAmount, // NOTE: OrderBook SHOULD transfer mlpAmount mlp to LiquidityPool
+        uint96 blpAmount, // NOTE: OrderBook SHOULD transfer blpAmount blp to LiquidityPool
         uint8 tokenId,
         uint96 tokenPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
     ) external returns (uint256) {}

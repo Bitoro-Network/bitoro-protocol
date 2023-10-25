@@ -5,12 +5,12 @@ import { BigNumber, Contract } from "ethers"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { toWei, toUnit, toBytes32, rate, PreMinedTokenTotalSupply, createFactory } from "./deployUtils"
 import { createContract, assembleSubAccountId, PositionOrderFlags } from "./deployUtils"
-import { MlpToken, TestOrderBook, TestLiquidityPool, LiquidityManager, Reader } from "../typechain"
+import { BlpToken, TestOrderBook, TestLiquidityPool, LiquidityManager, Reader } from "../typechain"
 const U = ethers.utils
 
 describe("Borrow", () => {
   const weth9 = "0x0000000000000000000000000000000000000000" // this test file will not use weth
-  let mlp: MlpToken
+  let blp: BlpToken
   let pool: TestLiquidityPool
   let usdc: Contract
   let wbnb: Contract
@@ -34,15 +34,15 @@ describe("Borrow", () => {
     const poolHop1 = await createContract("TestLiquidityPoolHop1")
     const poolHop2 = await createContract("TestLiquidityPoolHop2", [], { "contracts/libraries/LibLiquidity.sol:LibLiquidity": libLiquidity })
     pool = await ethers.getContractAt("TestLiquidityPool", poolHop1.address)
-    mlp = (await createContract("MlpToken")) as MlpToken
-    await mlp.initialize("MLP", "MLP")
-    await pool.initialize(poolHop2.address, mlp.address, admin.address, weth9, weth9, admin.address)
+    blp = (await createContract("BlpToken")) as BlpToken
+    await blp.initialize("BLP", "BLP")
+    await pool.initialize(poolHop2.address, blp.address, admin.address, weth9, weth9, admin.address)
     await pool.setLiquidityManager(admin.address, true)
     // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
     await pool.setNumbers(3600 * 8, rate("0.0001"), rate("0.0000"), rate("0.01"), toWei("0"))
-    // mlpPrice, mlpPrice
+    // blpPrice, blpPrice
     await pool.setEmergencyNumbers(toWei("1"), toWei("2000"))
-    await mlp.transfer(pool.address, toWei(PreMinedTokenTotalSupply))
+    await blp.transfer(pool.address, toWei(PreMinedTokenTotalSupply))
 
     usdc = await createContract("MockERC20", ["Usdc", "Usdc", 6])
     wbnb = await createContract("MockERC20", ["Wbnb", "Wbnb", 18])

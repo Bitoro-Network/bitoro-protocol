@@ -81,7 +81,7 @@ describe("Order", () => {
   }
   let orderBook: TestOrderBook
   let pool: Contract
-  let mlp: Contract
+  let blp: Contract
   let atk: Contract
   let ctk: Contract
 
@@ -97,12 +97,12 @@ describe("Order", () => {
   beforeEach(async () => {
     ctk = await createContract("MockERC20", ["CTK", "CTK", 18])
     atk = await createContract("MockERC20", ["ATK", "ATK", 18])
-    mlp = await createContract("MockERC20", ["MLP", "MLP", 18])
+    blp = await createContract("MockERC20", ["BLP", "BLP", 18])
 
     pool = await createContract("MockLiquidityPool")
     const libOrderBook = await createContract("LibOrderBook")
     orderBook = (await createContract("TestOrderBook", [], { "contracts/libraries/LibOrderBook.sol:LibOrderBook": libOrderBook })) as TestOrderBook
-    await orderBook.initialize(pool.address, mlp.address, weth9, weth9)
+    await orderBook.initialize(pool.address, blp.address, weth9, weth9)
     await orderBook.addBroker(broker.address)
     await orderBook.setBlockTimestamp(1000)
     await orderBook.setOrderTimeout(300, 86400 * 365)
@@ -409,13 +409,13 @@ describe("Order", () => {
       const target = toWei("29700")
       await orderBook.connect(broker).fillLiquidityOrder(0, toWei("2000"), toWei("1000"), current, target)
     }
-    expect(await mlp.balanceOf(user0.address)).to.equal(toWei("0")) // because this test uses a mocked liquidity pool
-    await mlp.mint(user0.address, toWei("2"))
+    expect(await blp.balanceOf(user0.address)).to.equal(toWei("0")) // because this test uses a mocked liquidity pool
+    await blp.mint(user0.address, toWei("2"))
     // no1
-    await mlp.approve(orderBook.address, toWei("2"))
+    await blp.approve(orderBook.address, toWei("2"))
     {
       await orderBook.placeLiquidityOrder(0, toWei("1"), false)
-      expect(await mlp.balanceOf(user0.address)).to.equal(toWei("1"))
+      expect(await blp.balanceOf(user0.address)).to.equal(toWei("1"))
       {
         const orders = await orderBook.getOrders(0, 100)
         expect(orders.totalCount).to.equal(1)
@@ -423,7 +423,7 @@ describe("Order", () => {
       }
 
       await orderBook.cancelOrder(1)
-      expect(await mlp.balanceOf(user0.address)).to.equal(toWei("2"))
+      expect(await blp.balanceOf(user0.address)).to.equal(toWei("2"))
       {
         const orders = await orderBook.getOrders(0, 100)
         expect(orders.totalCount).to.equal(0)
@@ -436,7 +436,7 @@ describe("Order", () => {
     // no2
     {
       await orderBook.placeLiquidityOrder(0, toWei("1"), false)
-      expect(await mlp.balanceOf(user0.address)).to.equal(toWei("1"))
+      expect(await blp.balanceOf(user0.address)).to.equal(toWei("1"))
       {
         const orders = await orderBook.getOrders(0, 100)
         expect(orders.totalCount).to.equal(1)
@@ -454,9 +454,9 @@ describe("Order", () => {
       const result = await orderBook.getOrder(1)
       expect(result[1]).to.equal(false)
 
-      expect(await mlp.balanceOf(user0.address)).to.equal(toWei("1"))
-      expect(await mlp.balanceOf(orderBook.address)).to.equal(toWei("0"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("1"))
+      expect(await blp.balanceOf(user0.address)).to.equal(toWei("1"))
+      expect(await blp.balanceOf(orderBook.address)).to.equal(toWei("0"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("1"))
     }
   })
 

@@ -72,16 +72,16 @@ contract Events {
         address indexed trader,
         uint8 indexed tokenId,
         uint96 tokenPrice,
-        uint96 mlpPrice,
-        uint96 mlpAmount,
+        uint96 blpPrice,
+        uint96 blpAmount,
         uint96 fee
     );
     event RemoveLiquidity(
         address indexed trader,
         uint8 indexed tokenId,
         uint96 tokenPrice,
-        uint96 mlpPrice,
-        uint96 mlpAmount,
+        uint96 blpPrice,
+        uint96 blpAmount,
         uint96 fee
     );
     event UpdateFundingRate(
@@ -139,7 +139,7 @@ contract Events {
     );
     event SetFundingParams(uint8 indexed assetId, uint32 newBaseRate8H, uint32 newLimitRate8H);
     event SetFundingInterval(uint32 oldFundingInterval, uint32 newFundingInterval);
-    event SetMlpPriceRange(uint96 newLowerBound, uint96 newUpperBound);
+    event SetBlpPriceRange(uint96 newLowerBound, uint96 newUpperBound);
     event SetLiquidityFee(uint32 newLiquidityBaseFeeRate, uint32 newLiquidityDynamicFeeRate);
     event SetStrictStableDeviation(uint32 newStrictStableDeviation);
     event SetBrokerGasRebate(uint96 newBrokerGasRebate);

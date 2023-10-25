@@ -20,15 +20,15 @@
     "address": "0x2a62979197208da0430f732Cf353f6EA7Ad75337",
     "deployedAt": 9826483
   },
-  "MlpToken__implementation": {
+  "BlpToken__implementation": {
     "type": "plain",
-    "name": "MlpToken__implementation",
+    "name": "BlpToken__implementation",
     "address": "0x085F5B8945426Aa5e8239CD172070d0301Fe33BA",
     "deployedAt": 9826501
   },
-  "Mlp": {
+  "Blp": {
     "type": "upgradeable",
-    "name": "Mlp",
+    "name": "Blp",
     "address": "0x7CbaF5a14D953fF896E5B3312031515c858737C8",
     "dependencies": {
       "admin": "0xE52d9a3CBA458832A65cfa9FC8a74bacAbdeB32A",

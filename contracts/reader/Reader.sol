@@ -16,7 +16,7 @@ contract Reader {
         uint32 liquidityLockPeriod; // 1e0
         uint32 marketOrderTimeout; // 1e0
         uint32 maxLimitOrderTimeout; // 1e0
-        uint256 lpDeduct; // MLP totalSupply = PRE_MINED - Σ_chains lpDeduct
+        uint256 lpDeduct; // BLP totalSupply = PRE_MINED - Σ_chains lpDeduct
         uint256 stableDeduct; // debt of stable coins = PRE_MINED - Σ_chains stableDeduct
         bool isPositionOrderPaused;
         bool isLiquidityOrderPaused;
@@ -28,8 +28,8 @@ contract Reader {
         uint32 fundingInterval; // 1e0
         uint32 liquidityBaseFeeRate; // 1e5
         uint32 liquidityDynamicFeeRate; // 1e5
-        uint96 mlpPriceLowerBound;
-        uint96 mlpPriceUpperBound;
+        uint96 blpPriceLowerBound;
+        uint96 blpPriceUpperBound;
         uint32 lastFundingTime; // 1e0
         uint32 sequence; // 1e0. note: will be 0 after 0xffffffff
         uint32 strictStableDeviation; // 1e5
@@ -109,20 +109,20 @@ contract Reader {
     }
 
     ILiquidityPool public pool;
-    IERC20 public mlp;
+    IERC20 public blp;
     ILiquidityManager public dex;
     IOrderBook public orderBook;
     address[] public deductWhiteList;
 
     constructor(
         address pool_,
-        address mlp_,
+        address blp_,
         address dex_,
         address orderBook_,
         address[] memory deductWhiteList_ // bitoroToken in these addresses are also not considered as debt
     ) {
         pool = ILiquidityPool(pool_);
-        mlp = IERC20(mlp_);
+        blp = IERC20(blp_);
         dex = ILiquidityManager(dex_);
         orderBook = IOrderBook(orderBook_);
         uint256 listLength = deductWhiteList_.length;
@@ -171,7 +171,7 @@ contract Reader {
         chain.isLiquidityOrderPaused = orderBook.isLiquidityOrderPaused();
 
         // Deduct
-        chain.lpDeduct = getDeduct(address(mlp));
+        chain.lpDeduct = getDeduct(address(blp));
         if (stableBitoroTokenAddress != address(0)) {
             chain.stableDeduct = getDeduct(stableBitoroTokenAddress);
         }
@@ -251,8 +251,8 @@ contract Reader {
         p.liquidityDynamicFeeRate = u32s[5];
         p.sequence = u32s[6];
         p.strictStableDeviation = u32s[7];
-        p.mlpPriceLowerBound = u96s[0];
-        p.mlpPriceUpperBound = u96s[1];
+        p.blpPriceLowerBound = u96s[0];
+        p.blpPriceUpperBound = u96s[1];
     }
 
     function _convertAssetStorage(Asset memory asset) internal pure returns (AssetStorage memory a) {

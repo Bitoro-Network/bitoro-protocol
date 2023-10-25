@@ -5,11 +5,11 @@ import { Contract } from "ethers"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { toWei, toUnit, toBytes32, rate, PreMinedTokenTotalSupply, createFactory } from "./deployUtils"
 import { createContract, assembleSubAccountId, PositionOrderFlags } from "./deployUtils"
-import { MlpToken, TestOrderBook, TestLiquidityPool, LiquidityManager, Reader, POL, WETH9 } from "../typechain"
+import { BlpToken, TestOrderBook, TestLiquidityPool, LiquidityManager, Reader, POL, WETH9 } from "../typechain"
 const U = ethers.utils
 
 describe("POL", () => {
-  let mlp: MlpToken
+  let blp: BlpToken
   let pool: TestLiquidityPool
   let orderBook: TestOrderBook
   let liquidityManager: LiquidityManager
@@ -34,26 +34,26 @@ describe("POL", () => {
     const poolHop1 = await createContract("TestLiquidityPoolHop1")
     const poolHop2 = await createContract("TestLiquidityPoolHop2", [], { "contracts/libraries/LibLiquidity.sol:LibLiquidity": libLiquidity })
     pool = await ethers.getContractAt("TestLiquidityPool", poolHop1.address)
-    mlp = (await createContract("MlpToken")) as MlpToken
+    blp = (await createContract("BlpToken")) as BlpToken
     const libOrderBook = await createContract("LibOrderBook")
     orderBook = (await createContract("TestOrderBook", [], { "contracts/libraries/LibOrderBook.sol:LibOrderBook": libOrderBook })) as TestOrderBook
     liquidityManager = (await createContract("LiquidityManager")) as LiquidityManager
     weth9 = (await createContract("WETH9")) as WETH9
     nativeUnwrapper = await createContract("NativeUnwrapper", [weth9.address])
     pol = (await createContract("POL")) as POL
-    await mlp.initialize("MLP", "MLP")
-    await orderBook.initialize(pool.address, mlp.address, weth9.address, nativeUnwrapper.address)
+    await blp.initialize("BLP", "BLP")
+    await orderBook.initialize(pool.address, blp.address, weth9.address, nativeUnwrapper.address)
     await orderBook.addBroker(broker.address)
     await orderBook.setLiquidityLockPeriod(5 * 60)
     await orderBook.setOrderTimeout(300, 86400 * 365)
     await liquidityManager.initialize(vault.address, pool.address)
-    await pool.initialize(poolHop2.address, mlp.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address)
+    await pool.initialize(poolHop2.address, blp.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address)
     // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
     await pool.setNumbers(3600 * 8, rate("0.0001"), rate("0.0000"), rate("0.01"), toWei("0"))
-    // mlpPrice, mlpPrice
+    // blpPrice, blpPrice
     await pool.setEmergencyNumbers(toWei("1"), toWei("2000"))
     await pool.setLiquidityManager(liquidityManager.address, true)
-    await mlp.transfer(pool.address, toWei(PreMinedTokenTotalSupply))
+    await blp.transfer(pool.address, toWei(PreMinedTokenTotalSupply))
     await pol.connect(op).initialize(pool.address, orderBook.address, weth9.address)
 
     const bitoroWeth = await createContract("BitoroToken")
@@ -86,9 +86,9 @@ describe("POL", () => {
       expect(await weth9.balanceOf(pol.address)).to.equal(toWei("0"))
       expect(await weth9.balanceOf(orderBook.address)).to.equal(toWei("1"))
       expect(await weth9.balanceOf(pool.address)).to.equal(toWei("0"))
-      expect(await mlp.balanceOf(pol.address)).to.equal(toWei("0"))
-      expect(await mlp.balanceOf(orderBook.address)).to.equal(toWei("0"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("1000000000000000000"))
+      expect(await blp.balanceOf(pol.address)).to.equal(toWei("0"))
+      expect(await blp.balanceOf(orderBook.address)).to.equal(toWei("0"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("1000000000000000000"))
     }
     {
       const current = toWei("29700")
@@ -99,17 +99,17 @@ describe("POL", () => {
       expect(await weth9.balanceOf(pol.address)).to.equal(toWei("0"))
       expect(await weth9.balanceOf(orderBook.address)).to.equal(toWei("0"))
       expect(await weth9.balanceOf(pool.address)).to.equal(toWei("1"))
-      expect(await mlp.balanceOf(pol.address)).to.equal(toWei("0.9999")) // (1 - fee) * 1000 / 1000
-      expect(await mlp.balanceOf(orderBook.address)).to.equal(toWei("0"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("999999999999999999.0001"))
+      expect(await blp.balanceOf(pol.address)).to.equal(toWei("0.9999")) // (1 - fee) * 1000 / 1000
+      expect(await blp.balanceOf(orderBook.address)).to.equal(toWei("0"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("999999999999999999.0001"))
       const collateralInfo = await pool.getAssetInfo(0)
       expect(collateralInfo.spotLiquidity).to.equal(toWei("1")) // fee = 0.01
       expect(collateralInfo.collectedFee).to.equal(toWei("0.0001"))
     }
     // withdraw
-    await expect(pol.transferAllERC20(op.address, [mlp.address])).to.revertedWith("Ownable: caller is not the owner")
-    await pol.connect(op).transferAllERC20(op.address, [mlp.address])
-    expect(await mlp.balanceOf(pol.address)).to.equal(toWei("0"))
-    expect(await mlp.balanceOf(op.address)).to.equal(toWei("0.9999"))
+    await expect(pol.transferAllERC20(op.address, [blp.address])).to.revertedWith("Ownable: caller is not the owner")
+    await pol.connect(op).transferAllERC20(op.address, [blp.address])
+    expect(await blp.balanceOf(pol.address)).to.equal(toWei("0"))
+    expect(await blp.balanceOf(op.address)).to.equal(toWei("0.9999"))
   })
 })

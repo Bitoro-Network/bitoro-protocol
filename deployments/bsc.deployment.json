@@ -49,9 +49,9 @@
     "name": "PeggedFtm",
     "address": "0xad29abb318791d579433d831ed122afeaf29dcfe"
   },
-  "PeggedMlp": {
+  "PeggedBlp": {
     "type": "preset",
-    "name": "PeggedMlp",
+    "name": "PeggedBlp",
     "address": "0x07145Ad7C7351c6FE86b6B841fC9Bed74eb475A7"
   },
   "PeggedBitoroUsd": {

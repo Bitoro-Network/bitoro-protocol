@@ -5,7 +5,7 @@ import { Contract } from "ethers"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { toWei, toUnit, toBytes32, createFactory, ensureFinished, rate } from "./deployUtils"
 import { createContract, assembleSubAccountId } from "./deployUtils"
-import { MlpToken, TestOrderBook, TestLiquidityPool, WBNB, NativeUnwrapper } from "../typechain"
+import { BlpToken, TestOrderBook, TestLiquidityPool, WBNB, NativeUnwrapper } from "../typechain"
 const U = ethers.utils
 
 describe("BscCompatible - this test should be tested on bscTestnet", () => {
@@ -41,10 +41,10 @@ describe("BscCompatible - this test should be tested on bscTestnet", () => {
     console.log("bscTestnet wbnb", wbnb.address, "pool", poolProxy.address, "book", orderBook.address, "unwrap", nativeUnwrapper.address)
     console.log("bscTestnet contracts deployed")
     pool = await ethers.getContractAt("TestLiquidityPool", poolProxy.address)
-    const mlp = "0x0000000000000000000000000000000000000000"
-    await ensureFinished(orderBook.initialize(pool.address, mlp, wbnb.address, nativeUnwrapper.address))
+    const blp = "0x0000000000000000000000000000000000000000"
+    await ensureFinished(orderBook.initialize(pool.address, blp, wbnb.address, nativeUnwrapper.address))
     await ensureFinished(orderBook.addBroker(broker.address))
-    await ensureFinished(pool.initialize(poolHop2.address, mlp, orderBook.address, wbnb.address, nativeUnwrapper.address, vault.address))
+    await ensureFinished(pool.initialize(poolHop2.address, blp, orderBook.address, wbnb.address, nativeUnwrapper.address, vault.address))
     await ensureFinished(nativeUnwrapper.addWhiteList(pool.address))
     await ensureFinished(nativeUnwrapper.addWhiteList(orderBook.address))
     console.log("bscTestnet contracts initialized")

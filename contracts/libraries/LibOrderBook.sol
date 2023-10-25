@@ -99,7 +99,7 @@ library LibOrderBook {
             address collateralAddress = _storage.pool.getAssetAddress(assetId);
             _transferIn(_storage, account, collateralAddress, address(this), rawAmount);
         } else {
-            _storage.mlp.safeTransferFrom(account, address(this), rawAmount);
+            _storage.blp.safeTransferFrom(account, address(this), rawAmount);
         }
         uint64 orderId = _storage.nextOrderId++;
         bytes32[3] memory data = LibOrder.encodeLiquidityOrder(
@@ -119,13 +119,13 @@ library LibOrderBook {
         OrderBookStorage storage _storage,
         uint32 blockTimestamp,
         uint96 assetPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue,
         bytes32[3] memory orderData
     ) external returns (uint256 outAmount) {
         LiquidityOrder memory order = orderData.decodeLiquidityOrder();
-        require(blockTimestamp >= order.placeOrderTime + _storage.liquidityLockPeriod, "LCK"); // mlp token is LoCKed
+        require(blockTimestamp >= order.placeOrderTime + _storage.liquidityLockPeriod, "LCK"); // blp token is LoCKed
         uint96 rawAmount = order.rawAmount;
         if (order.isAdding) {
             IERC20Upgradeable collateral = IERC20Upgradeable(_storage.pool.getAssetAddress(order.assetId));
@@ -135,18 +135,18 @@ library LibOrderBook {
                 order.assetId,
                 rawAmount,
                 assetPrice,
-                mlpPrice,
+                blpPrice,
                 currentAssetValue,
                 targetAssetValue
             );
         } else {
-            _storage.mlp.safeTransfer(address(_storage.pool), rawAmount);
+            _storage.blp.safeTransfer(address(_storage.pool), rawAmount);
             outAmount = _storage.pool.removeLiquidity(
                 order.account,
                 rawAmount,
                 order.assetId,
                 assetPrice,
-                mlpPrice,
+                blpPrice,
                 currentAssetValue,
                 targetAssetValue
             );

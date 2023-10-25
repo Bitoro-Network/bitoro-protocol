@@ -3,7 +3,7 @@ import { restorableEnviron } from "./deployer/environ"
 import { toWei, toUnit, toBytes32, rate, ensureFinished, ReferenceOracleType } from "../test/deployUtils"
 import { Deployer, DeploymentOptions } from "./deployer/deployer"
 import { LiquidityPool, OrderBook, LiquidityManager, Reader, NativeUnwrapper } from "../typechain"
-import { BitoroToken, MlpToken, MockERC20 } from "../typechain"
+import { BitoroToken, BlpToken, MockERC20 } from "../typechain"
 import { Contract, ContractReceipt } from "ethers"
 import { transferThroughDemoBridge } from "./demoBridgeTransfer"
 import { Vault } from "../typechain/Vault"
@@ -244,14 +244,14 @@ async function main(deployer: Deployer) {
   // deploy
   let proxyAdmin = deployer.addressOf("ProxyAdmin")
   const weth9: MockERC20 = await deployer.getDeployedContract("MockERC20", "WETH9")
-  const mlpToken: MlpToken = await deployer.deployUpgradeableOrSkip("MlpToken", "Mlp", proxyAdmin)
+  const blpToken: BlpToken = await deployer.deployUpgradeableOrSkip("BlpToken", "Blp", proxyAdmin)
   await deployer.deployUpgradeableOrSkip("LiquidityPoolHop1", "LiquidityPool", proxyAdmin)
   const poolHop2: Contract = await deployer.deployOrSkip("LiquidityPoolHop2", "LiquidityPoolHop2")
   const pool: LiquidityPool = await deployer.getDeployedContract("LiquidityPool", "LiquidityPool")
   const orderBook: OrderBook = await deployer.deployUpgradeableOrSkip("OrderBook", "OrderBook", proxyAdmin)
   await deployer.deployUpgradeableOrSkip("LiquidityManager", "LiquidityManager", proxyAdmin)
   const liquidityManager = await deployer.getDeployedContract("LiquidityManager", "LiquidityManager")
-  const reader: Reader = await deployer.deployOrSkip("Reader", "Reader", pool.address, mlpToken.address, liquidityManager.address, orderBook.address, [
+  const reader: Reader = await deployer.deployOrSkip("Reader", "Reader", pool.address, blpToken.address, liquidityManager.address, orderBook.address, [
     accounts[0].address, // deployer's bitoro tokens are not debt
   ])
   const nativeUnwrapper: NativeUnwrapper = await deployer.deployOrSkip("NativeUnwrapper", "NativeUnwrapper", weth9.address)
@@ -261,11 +261,11 @@ async function main(deployer: Deployer) {
 
   // init
   console.log("init")
-  await ensureFinished(mlpToken.initialize("BITORO LP", "BITOROLP" + TOKEN_POSTFIX))
+  await ensureFinished(blpToken.initialize("BITORO LP", "BITOROLP" + TOKEN_POSTFIX))
   await ensureFinished(bitoroUsd.initialize("BITORO Token for USD", "bitoroUSD" + TOKEN_POSTFIX))
   await ensureFinished(bitoroWeth.initialize("BITORO Token for WETH", "bitoroWETH" + TOKEN_POSTFIX))
-  await ensureFinished(pool.initialize(poolHop2.address, mlpToken.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address))
-  await ensureFinished(orderBook.initialize(pool.address, mlpToken.address, weth9.address, nativeUnwrapper.address))
+  await ensureFinished(pool.initialize(poolHop2.address, blpToken.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address))
+  await ensureFinished(orderBook.initialize(pool.address, blpToken.address, weth9.address, nativeUnwrapper.address))
   await orderBook.addBroker(accounts[1].address)
   await orderBook.addBroker(keeperAddress)
   await orderBook.setLiquidityLockPeriod(5 * 60)
@@ -273,18 +273,18 @@ async function main(deployer: Deployer) {
   await ensureFinished(liquidityManager.initialize(vault.address, pool.address))
   // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
   await pool.setNumbers(3600 * 8, rate("0.0025"), rate("0.005"), rate("0.01"), toWei("0"))
-  // mlpPrice, mlpPrice
+  // blpPrice, blpPrice
   await pool.setEmergencyNumbers(toWei("0.5"), toWei("1.1"))
   await pool.setLiquidityManager(liquidityManager.address, true)
   await ensureFinished(nativeUnwrapper.addWhiteList(pool.address))
   await ensureFinished(nativeUnwrapper.addWhiteList(orderBook.address))
   await ensureFinished(vault.initialize())
 
-  console.log("transfer mlp")
-  await mlpToken.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 97, mlpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 4002, mlpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 43113, mlpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  console.log("transfer blp")
+  await blpToken.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  await transferThroughDemoBridge(deployer, accounts[0], 97, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  await transferThroughDemoBridge(deployer, accounts[0], 4002, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  await transferThroughDemoBridge(deployer, accounts[0], 43113, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
 
   console.log("transfer bitoroUsd")
   await bitoroUsd.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)

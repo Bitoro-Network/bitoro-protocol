@@ -21,7 +21,7 @@ struct OrderBookStorage {
     ILiquidityPool pool;
     uint64 nextOrderId;
     LibOrder.OrderList orders;
-    IERC20Upgradeable mlp;
+    IERC20Upgradeable blp;
     IWETH weth;
     uint32 liquidityLockPeriod; // 1e0
     INativeUnwrapper nativeUnwrapper;

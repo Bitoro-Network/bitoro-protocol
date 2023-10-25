@@ -3,7 +3,7 @@ import { restorableEnviron } from "./deployer/environ"
 import { toWei, toUnit, toBytes32, rate, ensureFinished, ReferenceOracleType } from "../test/deployUtils"
 import { Deployer, DeploymentOptions } from "./deployer/deployer"
 import { LiquidityPool, OrderBook, LiquidityManager, Reader, NativeUnwrapper } from "../typechain"
-import { BitoroToken, MlpToken, MockERC20 } from "../typechain"
+import { BitoroToken, BlpToken, MockERC20 } from "../typechain"
 import { Contract, ContractReceipt } from "ethers"
 import { Vault } from "../typechain/Vault"
 
@@ -30,7 +30,7 @@ const ENV: DeploymentOptions = {
     // PeggedWeth: { address: "0xd569Ae3Be614DE18aBF1B9b1BE664B3CF899830e" },
     // PeggedWbtc: { address: "0x981306FE3749e98661e190522099717AcE1D95B0" },
     // PeggedLink: { address: "0x5905b650fCFE12f2d7979651A8AdeB9Dde39Cc91" },
-    // PeggedMlp: { address: "0x0F97336F83DB38E0D8B7324F37703e6216C533De" },
+    // PeggedBlp: { address: "0x0F97336F83DB38E0D8B7324F37703e6216C533De" },
     // PeggedBitoroUsd: { address: "0x20Fb9584d68Ce8CD7e59092B3E046c5175C1ce76" },
     // PeggedBitoroWeth: { address: "0xeB1b1D630b48e8539316e5247941D40904e050dB" },
     // PeggedBitoroWbtc: { address: "0x8C62ad34A7EC8ccE177A397c9AD31D1fE70a4A54" },
@@ -47,7 +47,7 @@ const ENV: DeploymentOptions = {
     // PeggedWeth: { address: "0x30aAa26DD30ED56Ef992Dc463B73365dEb6cd2cd" },
     // PeggedWbtc: { address: "0x62A2ecF53B912FBBf87e07345Ab2dd1b8112E635" },
     // PeggedLink: { address: "0x981306FE3749e98661e190522099717AcE1D95B0" },
-    // PeggedMlp: { address: "0xF65976b7a02bd986DbBc5fcA1881633F5665ff99" },
+    // PeggedBlp: { address: "0xF65976b7a02bd986DbBc5fcA1881633F5665ff99" },
     // PeggedBitoroUsd: { address: "0x5905b650fCFE12f2d7979651A8AdeB9Dde39Cc91" },
     // PeggedBitoroWeth: { address: "0x0F97336F83DB38E0D8B7324F37703e6216C533De" },
     // PeggedBitoroWbtc: { address: "0x20Fb9584d68Ce8CD7e59092B3E046c5175C1ce76" },
@@ -64,7 +64,7 @@ const ENV: DeploymentOptions = {
     // PeggedWeth: { address: "0xFC6d57Ec2715BC57D6D82133F0F063778923BCA7" },
     // PeggedWbtc: { address: "0x547FaBf704469f73ffa6AFF44d311f5586bFE5D5" },
     // PeggedLink: { address: "0x13f9A02F8fA01528F603269A52D64fBAaD3b3351" },
-    // PeggedMlp: { address: "0x9229bb4403113c26EE8AcAcAD2fEcB6a2a83D514" },
+    // PeggedBlp: { address: "0x9229bb4403113c26EE8AcAcAD2fEcB6a2a83D514" },
     // PeggedBitoroUsd: { address: "0x614388aa2612cB9A476C34c2343f136927CE3dbd" },
     // PeggedBitoroWeth: { address: "0x36475Bc5Ba7988A0d65e739A37d24Dd3D34d1399" },
     // PeggedBitoroWbtc: { address: "0x19b306373e29A9d41c761B2373E8968E9b72EddF" },
@@ -251,14 +251,14 @@ async function main(deployer: Deployer) {
   // deploy
   let proxyAdmin = deployer.addressOf("ProxyAdmin")
   const wNative: MockERC20 = await deployer.getDeployedContract("MockERC20", "WrappedNative")
-  const mlpToken: MlpToken = await deployer.getDeployedContract("MockERC20", "PeggedMlp")
+  const blpToken: BlpToken = await deployer.getDeployedContract("MockERC20", "PeggedBlp")
   await deployer.deployUpgradeableOrSkip("LiquidityPoolHop1", "LiquidityPool", proxyAdmin)
   const poolHop2: Contract = await deployer.deployOrSkip("LiquidityPoolHop2", "LiquidityPoolHop2")
   const pool: LiquidityPool = await deployer.getDeployedContract("LiquidityPool", "LiquidityPool")
   const orderBook: OrderBook = await deployer.deployUpgradeableOrSkip("OrderBook", "OrderBook", proxyAdmin)
   await deployer.deployUpgradeableOrSkip("LiquidityManager", "LiquidityManager", proxyAdmin)
   const liquidityManager = await deployer.getDeployedContract("LiquidityManager", "LiquidityManager")
-  const reader: Reader = await deployer.deployOrSkip("Reader", "Reader", pool.address, mlpToken.address, liquidityManager.address, orderBook.address, [
+  const reader: Reader = await deployer.deployOrSkip("Reader", "Reader", pool.address, blpToken.address, liquidityManager.address, orderBook.address, [
     accounts[0].address, // deployer's bitoro tokens are not debt
   ])
   const nativeUnwrapper: NativeUnwrapper = await deployer.deployOrSkip("NativeUnwrapper", "NativeUnwrapper", wNative.address)
@@ -267,8 +267,8 @@ async function main(deployer: Deployer) {
 
   // init
   console.log("init")
-  await ensureFinished(pool.initialize(poolHop2.address, mlpToken.address, orderBook.address, wNative.address, nativeUnwrapper.address, vault.address))
-  await ensureFinished(orderBook.initialize(pool.address, mlpToken.address, wNative.address, nativeUnwrapper.address))
+  await ensureFinished(pool.initialize(poolHop2.address, blpToken.address, orderBook.address, wNative.address, nativeUnwrapper.address, vault.address))
+  await ensureFinished(orderBook.initialize(pool.address, blpToken.address, wNative.address, nativeUnwrapper.address))
   await orderBook.addBroker(accounts[1].address)
   await orderBook.addBroker(keeperAddress)
   await orderBook.setLiquidityLockPeriod(5 * 60)
@@ -276,15 +276,15 @@ async function main(deployer: Deployer) {
   await ensureFinished(liquidityManager.initialize(vault.address, pool.address))
   // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
   await pool.setNumbers(3600 * 8, rate("0.0025"), rate("0.005"), rate("0.01"), toWei("0"))
-  // mlpPrice, mlpPrice
+  // blpPrice, blpPrice
   await pool.setEmergencyNumbers(toWei("0.5"), toWei("1.1"))
   await pool.setLiquidityManager(liquidityManager.address, true)
   await ensureFinished(nativeUnwrapper.addWhiteList(pool.address))
   await ensureFinished(nativeUnwrapper.addWhiteList(orderBook.address))
   await ensureFinished(vault.initialize())
 
-  console.log("transfer mlp")
-  await mlpToken.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  console.log("transfer blp")
+  await blpToken.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
 
   console.log("transfer bitoroUsd")
   await bitoroUsd.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)

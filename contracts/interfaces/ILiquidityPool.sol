@@ -26,8 +26,8 @@ interface ILiquidityPool {
             // [6] sequence. note: will be 0 after 0xffffffff
             // [7] strictStableDeviation
             uint32[8] memory u32s,
-            // [0] mlpPriceLowerBound
-            // [1] mlpPriceUpperBound
+            // [0] blpPriceLowerBound
+            // [1] blpPriceUpperBound
             uint96[2] memory u96s
         );
 
@@ -74,7 +74,7 @@ interface ILiquidityPool {
      * @param tokenId           asset.id that added.
      * @param rawAmount         asset token amount. decimals = erc20.decimals.
      * @param tokenPrice        token price. decimals = 18.
-     * @param mlpPrice          mlp price.  decimals = 18.
+     * @param blpPrice          blp price.  decimals = 18.
      * @param currentAssetValue liquidity USD value of a single asset in all chains (even if tokenId is a stable asset).
      * @param targetAssetValue  weight / Σ weight * total liquidity USD value in all chains.
      */
@@ -83,28 +83,28 @@ interface ILiquidityPool {
         uint8 tokenId,
         uint256 rawAmount, // NOTE: OrderBook SHOULD transfer rawAmount collateral to LiquidityPool
         uint96 tokenPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
-    ) external returns (uint96 mlpAmount);
+    ) external returns (uint96 blpAmount);
 
     /**
      * @dev   Remove liquidity.
      *
      * @param trader            liquidity provider address.
-     * @param mlpAmount         mlp amount. decimals = 18.
+     * @param blpAmount         blp amount. decimals = 18.
      * @param tokenId           asset.id that removed to.
      * @param tokenPrice        token price. decimals = 18.
-     * @param mlpPrice          mlp price. decimals = 18.
+     * @param blpPrice          blp price. decimals = 18.
      * @param currentAssetValue liquidity USD value of a single asset in all chains (even if tokenId is a stable asset). decimals = 18.
      * @param targetAssetValue  weight / Σ weight * total liquidity USD value in all chains. decimals = 18.
      */
     function removeLiquidity(
         address trader,
-        uint96 mlpAmount, // NOTE: OrderBook SHOULD transfer mlpAmount mlp to LiquidityPool
+        uint96 blpAmount, // NOTE: OrderBook SHOULD transfer blpAmount blp to LiquidityPool
         uint8 tokenId,
         uint96 tokenPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
     ) external returns (uint256 rawAmount);

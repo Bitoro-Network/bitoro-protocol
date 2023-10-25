@@ -5,11 +5,11 @@ import { BigNumber, Contract } from "ethers"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { toWei, toUnit, toBytes32, rate, PreMinedTokenTotalSupply, createFactory } from "./deployUtils"
 import { createContract } from "./deployUtils"
-import { MlpToken, TestOrderBook, TestLiquidityPool, LiquidityManager, MockERC20, Reader, TestRebalancer } from "../typechain"
+import { BlpToken, TestOrderBook, TestLiquidityPool, LiquidityManager, MockERC20, Reader, TestRebalancer } from "../typechain"
 const U = ethers.utils
 
 describe("Rebalance", () => {
-  let mlp: MlpToken
+  let blp: BlpToken
   let pool: TestLiquidityPool
   let orderBook: TestOrderBook
   let liquidityManager: LiquidityManager
@@ -36,26 +36,26 @@ describe("Rebalance", () => {
     const poolHop1 = await createContract("TestLiquidityPoolHop1")
     const poolHop2 = await createContract("TestLiquidityPoolHop2", [], { "contracts/libraries/LibLiquidity.sol:LibLiquidity": libLiquidity })
     pool = await ethers.getContractAt("TestLiquidityPool", poolHop1.address)
-    mlp = (await createContract("MlpToken")) as MlpToken
+    blp = (await createContract("BlpToken")) as BlpToken
     const libOrderBook = await createContract("LibOrderBook")
     orderBook = (await createContract("TestOrderBook", [], { "contracts/libraries/LibOrderBook.sol:LibOrderBook": libOrderBook })) as TestOrderBook
     liquidityManager = (await createContract("LiquidityManager")) as LiquidityManager
     weth9 = (await createContract("WETH9")) as MockERC20
     nativeUnwrapper = await createContract("NativeUnwrapper", [weth9.address])
     rebalancer = (await createContract("TestRebalancer", [pool.address, orderBook.address])) as TestRebalancer
-    await mlp.initialize("MLP", "MLP")
-    await orderBook.initialize(pool.address, mlp.address, weth9.address, nativeUnwrapper.address)
+    await blp.initialize("BLP", "BLP")
+    await orderBook.initialize(pool.address, blp.address, weth9.address, nativeUnwrapper.address)
     await orderBook.addBroker(broker.address)
     await liquidityManager.initialize(vault.address, pool.address)
-    await pool.initialize(poolHop2.address, mlp.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address)
+    await pool.initialize(poolHop2.address, blp.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address)
     // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
     await pool.setNumbers(3600 * 8, rate("0.0001"), rate("0.0000"), rate("0.01"), toWei("0"))
-    // mlpPrice, mlpPrice
+    // blpPrice, blpPrice
     await pool.setEmergencyNumbers(toWei("1"), toWei("2000"))
     await pool.setLiquidityManager(liquidityManager.address, true)
     await nativeUnwrapper.addWhiteList(pool.address)
     await nativeUnwrapper.addWhiteList(orderBook.address)
-    await mlp.transfer(pool.address, toWei(PreMinedTokenTotalSupply))
+    await blp.transfer(pool.address, toWei(PreMinedTokenTotalSupply))
 
     usdc = await createContract("MockERC20", ["Usdc", "Usdc", 6])
 

@@ -5,7 +5,7 @@ struct LiquidityPoolStorage {
     // slot
     address orderBook;
     // slot
-    address mlp;
+    address blp;
     // slot
     address _reserved6; // was liquidityManager
     // slot
@@ -28,8 +28,8 @@ struct LiquidityPoolStorage {
     address _reserved4;
     uint96 _reserved5;
     // slot
-    uint96 mlpPriceLowerBound; // safeguard against mlp price attacks
-    uint96 mlpPriceUpperBound; // safeguard against mlp price attacks
+    uint96 blpPriceLowerBound; // safeguard against blp price attacks
+    uint96 blpPriceUpperBound; // safeguard against blp price attacks
     uint32 liquidityBaseFeeRate; // 1e5
     uint32 liquidityDynamicFeeRate; // 1e5
     // slot

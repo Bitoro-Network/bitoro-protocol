@@ -9,7 +9,7 @@ const U = ethers.utils
 
 describe("FeeRates", () => {
   const weth9 = "0x0000000000000000000000000000000000000000" // this test file will not use weth
-  let mlp: Contract
+  let blp: Contract
   let pool: TestLiquidityPool
   let asset0: Contract
   let asset1: Contract
@@ -35,9 +35,9 @@ describe("FeeRates", () => {
     const poolHop1 = await createContract("TestLiquidityPoolHop1")
     const poolHop2 = await createContract("TestLiquidityPoolHop2", [], { "contracts/libraries/LibLiquidity.sol:LibLiquidity": libLiquidity })
     pool = await ethers.getContractAt("TestLiquidityPool", poolHop1.address)
-    mlp = await createContract("MockERC20", ["MLP", "MLP", 18])
-    await mlp.mint(pool.address, toWei(PreMinedTokenTotalSupply))
-    await pool.initialize(poolHop2.address, mlp.address, user0.address /* test only */, weth9, weth9, user0.address /* vault */)
+    blp = await createContract("MockERC20", ["BLP", "BLP", 18])
+    await blp.mint(pool.address, toWei(PreMinedTokenTotalSupply))
+    await pool.initialize(poolHop2.address, blp.address, user0.address /* test only */, weth9, weth9, user0.address /* vault */)
     // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
     await pool.setNumbers(3600 * 8, rate("0.0001"), rate("0.0000"), rate("0.01"), toWei("0"))
   })

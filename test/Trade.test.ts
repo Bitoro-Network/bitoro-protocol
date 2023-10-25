@@ -9,7 +9,7 @@ import { MockChainlink } from "../typechain"
 
 describe("Trade", () => {
   const weth9 = "0x0000000000000000000000000000000000000000" // this test file will not use weth
-  let mlp: Contract
+  let blp: Contract
   let pool: TestLiquidityPool
   let asset0: Contract
   let asset1: Contract
@@ -35,12 +35,12 @@ describe("Trade", () => {
     const poolHop1 = await createContract("TestLiquidityPoolHop1")
     const poolHop2 = await createContract("TestLiquidityPoolHop2", [], { "contracts/libraries/LibLiquidity.sol:LibLiquidity": libLiquidity })
     pool = await ethers.getContractAt("TestLiquidityPool", poolHop1.address)
-    mlp = await createContract("MockERC20", ["MLP", "MLP", 18])
-    await mlp.mint(pool.address, toWei(PreMinedTokenTotalSupply))
-    await pool.initialize(poolHop2.address, mlp.address, user0.address /* test only */, weth9, weth9, user0.address /* vault */)
-    // fundingInterval, mlpPrice, mlpPrice, liqBase, liqDyn, σ_strict, brokerGas
+    blp = await createContract("MockERC20", ["BLP", "BLP", 18])
+    await blp.mint(pool.address, toWei(PreMinedTokenTotalSupply))
+    await pool.initialize(poolHop2.address, blp.address, user0.address /* test only */, weth9, weth9, user0.address /* vault */)
+    // fundingInterval, blpPrice, blpPrice, liqBase, liqDyn, σ_strict, brokerGas
     await pool.setNumbers(3600 * 8, rate("0.000"), rate("0.000"), rate("0.01"), toWei("0"))
-    // mlpPrice, mlpPrice
+    // blpPrice, blpPrice
     await pool.setEmergencyNumbers(toWei("1"), toWei("2"))
 
     asset0 = await createContract("MockERC20", ["AST0", "AST0", 18])
@@ -108,49 +108,49 @@ describe("Trade", () => {
     const target = toWei("29700")
     await asset0.mint(user0.address, toWei("10000"))
     await asset2.mint(user0.address, toWei("10000"))
-    expect(await mlp.balanceOf(pool.address)).to.equal(toWei("1000000000000000000"))
+    expect(await blp.balanceOf(pool.address)).to.equal(toWei("1000000000000000000"))
 
     // user 0 +liq
     {
       await asset0.transfer(pool.address, toWei("100"))
       await expect(pool.addLiquidity(user0.address, 0, toWei("100"), toWei("1"), toWei("0.1"), current, target)).to.revertedWith("MPO")
       await expect(pool.addLiquidity(user0.address, 0, toWei("100"), toWei("1"), toWei("2.1"), current, target)).to.revertedWith("MPO")
-      await pool.addLiquidity(user0.address, 0, toWei("100"), toWei("1"), toWei("1"), current, target) // = 100 mlp
+      await pool.addLiquidity(user0.address, 0, toWei("100"), toWei("1"), toWei("1"), current, target) // = 100 blp
       expect(await asset0.balanceOf(pool.address)).to.equal(toWei("100"))
-      expect(await mlp.balanceOf(user0.address)).to.equal(toWei("100"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("999999999999999900"))
+      expect(await blp.balanceOf(user0.address)).to.equal(toWei("100"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("999999999999999900"))
     }
     // user 0 +liq
     {
       await asset0.transfer(pool.address, toWei("100"))
-      await pool.addLiquidity(user0.address, 0, toWei("100"), toWei("1"), toWei("2"), current, target) // = 50 mlp
+      await pool.addLiquidity(user0.address, 0, toWei("100"), toWei("1"), toWei("2"), current, target) // = 50 blp
       expect(await asset0.balanceOf(pool.address)).to.equal(toWei("200"))
-      expect(await mlp.balanceOf(user0.address)).to.equal(toWei("150"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("999999999999999850"))
+      expect(await blp.balanceOf(user0.address)).to.equal(toWei("150"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("999999999999999850"))
     }
     // user 1 +liq
     {
       await asset0.transfer(pool.address, toWei("100"))
-      await pool.addLiquidity(user1.address, 0, toWei("100"), toWei("1"), toWei("1"), current, target) // = 100 mlp
+      await pool.addLiquidity(user1.address, 0, toWei("100"), toWei("1"), toWei("1"), current, target) // = 100 blp
       expect(await asset0.balanceOf(pool.address)).to.equal(toWei("300"))
-      expect(await mlp.balanceOf(user1.address)).to.equal(toWei("100"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("999999999999999750"))
+      expect(await blp.balanceOf(user1.address)).to.equal(toWei("100"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("999999999999999750"))
     }
     // user 1 +liq
     {
       await asset2.transfer(pool.address, toWei("100"))
-      await pool.addLiquidity(user1.address, 2, toWei("100"), toWei("2"), toWei("1"), current, target) // = 200 mlp
+      await pool.addLiquidity(user1.address, 2, toWei("100"), toWei("2"), toWei("1"), current, target) // = 200 blp
       expect(await asset2.balanceOf(pool.address)).to.equal(toWei("100"))
-      expect(await mlp.balanceOf(user1.address)).to.equal(toWei("300"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("999999999999999550"))
+      expect(await blp.balanceOf(user1.address)).to.equal(toWei("300"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("999999999999999550"))
     }
     // user 1 +liq
     {
       await asset0.transfer(pool.address, toWei("100"))
-      await pool.addLiquidity(user1.address, 0, toWei("100"), toWei("2"), toWei("1"), current, target) // = 200 mlp
+      await pool.addLiquidity(user1.address, 0, toWei("100"), toWei("2"), toWei("1"), current, target) // = 200 blp
       expect(await asset0.balanceOf(pool.address)).to.equal(toWei("400"))
-      expect(await mlp.balanceOf(user1.address)).to.equal(toWei("500"))
-      expect(await mlp.balanceOf(pool.address)).to.equal(toWei("999999999999999350"))
+      expect(await blp.balanceOf(user1.address)).to.equal(toWei("500"))
+      expect(await blp.balanceOf(pool.address)).to.equal(toWei("999999999999999350"))
     }
   })
 
@@ -161,8 +161,8 @@ describe("Trade", () => {
     // add liq
     await asset0.mint(pool.address, toWei("1000"))
     await asset1.mint(pool.address, toWei("1000"))
-    await pool.addLiquidity(user0.address, 0, toWei("1000"), toWei("1"), toWei("1"), current, target) // = 100 mlp
-    await pool.addLiquidity(user1.address, 1, toWei("1000"), toWei("1"), toWei("1"), current, target) // = 100 mlp
+    await pool.addLiquidity(user0.address, 0, toWei("1000"), toWei("1"), toWei("1"), current, target) // = 100 blp
+    await pool.addLiquidity(user1.address, 1, toWei("1000"), toWei("1"), toWei("1"), current, target) // = 100 blp
     expect(await asset0.balanceOf(pool.address)).to.equal(toWei("1000"))
 
     // remove liq
@@ -186,7 +186,7 @@ describe("Trade", () => {
     await expect(pool.addLiquidity(user0.address, 0, toWei("1000"), toWei("1"), toWei("1"), current, target)).to.revertedWith("TUL")
     // id, tradable, openable, shortable, useStable, enabled, strict, liq, halfSpread
     await pool.setAssetFlags(0, true, true, true, false, true, true, true, rate("0"))
-    await pool.addLiquidity(user0.address, 0, toWei("1000"), toWei("1"), toWei("1"), current, target) // = 100 mlp
+    await pool.addLiquidity(user0.address, 0, toWei("1000"), toWei("1"), toWei("1"), current, target) // = 100 blp
 
     // remove liq
     // id, tradable, openable, shortable, useStable, enabled, strict, liq, halfSpread

@@ -22,7 +22,7 @@ contract Liquidity is Storage, Account {
      * @param tokenId           asset.id that added.
      * @param rawAmount         asset token amount. decimals = erc20.decimals.
      * @param tokenPrice        token price.
-     * @param mlpPrice          mlp price.
+     * @param blpPrice          blp price.
      * @param currentAssetValue liquidity USD value of a single asset in all chains (even if tokenId is a stable asset).
      * @param targetAssetValue  weight / Σ weight * total liquidity USD value in all chains.
      */
@@ -31,16 +31,16 @@ contract Liquidity is Storage, Account {
         uint8 tokenId,
         uint256 rawAmount, // NOTE: OrderBook SHOULD transfer rawAmount collateral to LiquidityPool
         uint96 tokenPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
-    ) external onlyOrderBook returns (uint96 mlpAmount) {
+    ) external onlyOrderBook returns (uint96 blpAmount) {
         require(trader != address(0), "T=0"); // Trader address is zero
         require(_hasAsset(tokenId), "LST"); // the asset is not LiSTed
         require(rawAmount != 0, "A=0"); // Amount Is Zero
-        require(mlpPrice != 0, "P=0"); // Price Is Zero
-        require(mlpPrice <= _storage.mlpPriceUpperBound, "MPO"); // Mlp Price is Out of range
-        require(mlpPrice >= _storage.mlpPriceLowerBound, "MPO"); // Mlp Price is Out of range
+        require(blpPrice != 0, "P=0"); // Price Is Zero
+        require(blpPrice <= _storage.blpPriceUpperBound, "MPO"); // Blp Price is Out of range
+        require(blpPrice >= _storage.blpPriceLowerBound, "MPO"); // Blp Price is Out of range
         Asset storage token = _storage.assets[tokenId];
         require(token.isEnabled(), "ENA"); // the token is temporarily not ENAbled
         require(token.canAddRemoveLiquidity(), "TUL"); // the Token cannot be Used to add Liquidity
@@ -50,7 +50,7 @@ contract Liquidity is Storage, Account {
         uint96 wadAmount = token.toWad(rawAmount);
         token.spotLiquidity += wadAmount; // already reserved fee
         // fee
-        uint32 mlpFeeRate = _getLiquidityFeeRate(
+        uint32 blpFeeRate = _getLiquidityFeeRate(
             currentAssetValue,
             targetAssetValue,
             true,
@@ -58,14 +58,14 @@ contract Liquidity is Storage, Account {
             _storage.liquidityBaseFeeRate,
             _storage.liquidityDynamicFeeRate
         );
-        uint96 feeCollateral = uint256(wadAmount).rmul(mlpFeeRate).safeUint96();
+        uint96 feeCollateral = uint256(wadAmount).rmul(blpFeeRate).safeUint96();
         token.collectedFee += feeCollateral; // spotLiquidity was modified above
         emit CollectedFee(tokenId, feeCollateral);
         wadAmount -= feeCollateral;
-        // mlp
-        mlpAmount = ((uint256(wadAmount) * uint256(tokenPrice)) / uint256(mlpPrice)).safeUint96();
-        IERC20Upgradeable(_storage.mlp).transfer(trader, mlpAmount);
-        emit AddLiquidity(trader, tokenId, tokenPrice, mlpPrice, mlpAmount, feeCollateral);
+        // blp
+        blpAmount = ((uint256(wadAmount) * uint256(tokenPrice)) / uint256(blpPrice)).safeUint96();
+        IERC20Upgradeable(_storage.blp).transfer(trader, blpAmount);
+        emit AddLiquidity(trader, tokenId, tokenPrice, blpPrice, blpAmount, feeCollateral);
         _updateSequence();
         _updateBrokerTransactions();
     }
@@ -74,39 +74,39 @@ contract Liquidity is Storage, Account {
      * @dev   Remove liquidity.
      *
      * @param trader            liquidity provider address.
-     * @param mlpAmount         mlp amount.
+     * @param blpAmount         blp amount.
      * @param tokenId           asset.id that removed to.
      * @param tokenPrice        token price.
-     * @param mlpPrice          mlp price.
+     * @param blpPrice          blp price.
      * @param currentAssetValue liquidity USD value of a single asset in all chains (even if tokenId is a stable asset).
      * @param targetAssetValue  weight / Σ weight * total liquidity USD value in all chains.
      */
     function removeLiquidity(
         address trader,
-        uint96 mlpAmount, // NOTE: OrderBook SHOULD transfer mlpAmount mlp to LiquidityPool
+        uint96 blpAmount, // NOTE: OrderBook SHOULD transfer blpAmount blp to LiquidityPool
         uint8 tokenId,
         uint96 tokenPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
     ) external onlyOrderBook returns (uint256 rawAmount) {
         require(trader != address(0), "T=0"); // Trader address is zero
         require(_hasAsset(tokenId), "LST"); // the asset is not LiSTed
-        require(mlpPrice != 0, "P=0"); // Price Is Zero
-        require(mlpPrice <= _storage.mlpPriceUpperBound, "MPO"); // Mlp Price is Out of range
-        require(mlpPrice >= _storage.mlpPriceLowerBound, "MPO"); // Mlp Price is Out of range
-        require(mlpAmount != 0, "A=0"); // Amount Is Zero
+        require(blpPrice != 0, "P=0"); // Price Is Zero
+        require(blpPrice <= _storage.blpPriceUpperBound, "MPO"); // Blp Price is Out of range
+        require(blpPrice >= _storage.blpPriceLowerBound, "MPO"); // Blp Price is Out of range
+        require(blpAmount != 0, "A=0"); // Amount Is Zero
         Asset storage token = _storage.assets[tokenId];
         require(token.isEnabled(), "ENA"); // the token is temporarily not ENAbled
         require(token.canAddRemoveLiquidity(), "TUL"); // the Token cannot be Used to remove Liquidity
         tokenPrice = LibReferenceOracle.checkPriceWithSpread(_storage, token, tokenPrice, SpreadType.Ask);
 
         // amount
-        uint96 wadAmount = ((uint256(mlpAmount) * uint256(mlpPrice)) / uint256(tokenPrice)).safeUint96();
+        uint96 wadAmount = ((uint256(blpAmount) * uint256(blpPrice)) / uint256(tokenPrice)).safeUint96();
         // fee
         uint96 feeCollateral;
         {
-            uint32 mlpFeeRate = _getLiquidityFeeRate(
+            uint32 blpFeeRate = _getLiquidityFeeRate(
                 currentAssetValue,
                 targetAssetValue,
                 false,
@@ -114,7 +114,7 @@ contract Liquidity is Storage, Account {
                 _storage.liquidityBaseFeeRate,
                 _storage.liquidityDynamicFeeRate
             );
-            feeCollateral = uint256(wadAmount).rmul(mlpFeeRate).safeUint96();
+            feeCollateral = uint256(wadAmount).rmul(blpFeeRate).safeUint96();
         }
         token.collectedFee += feeCollateral; // spotLiquidity will be modified below
         emit CollectedFee(tokenId, feeCollateral);
@@ -124,7 +124,7 @@ contract Liquidity is Storage, Account {
         token.spotLiquidity -= wadAmount; // already deduct fee
         rawAmount = token.toRaw(wadAmount);
         token.transferOut(trader, rawAmount, _storage.weth, _storage.nativeUnwrapper);
-        emit RemoveLiquidity(trader, tokenId, tokenPrice, mlpPrice, mlpAmount, feeCollateral);
+        emit RemoveLiquidity(trader, tokenId, tokenPrice, blpPrice, blpAmount, feeCollateral);
         _updateSequence();
         _updateBrokerTransactions();
     }

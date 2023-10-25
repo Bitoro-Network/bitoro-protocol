@@ -72,11 +72,11 @@ contract OrderBook is Storage, Admin, ReentrancyGuardUpgradeable {
         PositionOrderExtra extra
     );
 
-    function initialize(address pool, address mlp, address weth, address nativeUnwrapper) external initializer {
+    function initialize(address pool, address blp, address weth, address nativeUnwrapper) external initializer {
         __SafeOwnable_init();
 
         _storage.pool = ILiquidityPool(pool);
-        _storage.mlp = IERC20Upgradeable(mlp);
+        _storage.blp = IERC20Upgradeable(blp);
         _storage.weth = IWETH(weth);
         _storage.nativeUnwrapper = INativeUnwrapper(nativeUnwrapper);
         _storage.maintainer = owner();
@@ -318,14 +318,14 @@ contract OrderBook is Storage, Admin, ReentrancyGuardUpgradeable {
      *        Check _getLiquidityFeeRate in Liquidity.sol on how to calculate liquidity fee.
      * @param orderId           order id.
      * @param assetPrice        token price that added/removed to. decimals = 18.
-     * @param mlpPrice          mlp price. decimals = 18.
+     * @param blpPrice          blp price. decimals = 18.
      * @param currentAssetValue liquidity USD value of a single asset in all chains (even if tokenId is a stable asset). decimals = 18.
      * @param targetAssetValue  weight / Σ weight * total liquidity USD value in all chains. decimals = 18.
      */
     function fillLiquidityOrder(
         uint64 orderId,
         uint96 assetPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
     ) external onlyBroker whenLiquidityOrderEnabled nonReentrant {
@@ -339,7 +339,7 @@ contract OrderBook is Storage, Admin, ReentrancyGuardUpgradeable {
                 ILiquidityCallback(order.account).beforeFillLiquidityOrder{ gas: _callbackGasLimit() }(
                     order,
                     assetPrice,
-                    mlpPrice,
+                    blpPrice,
                     currentAssetValue,
                     targetAssetValue
                 )
@@ -356,11 +356,11 @@ contract OrderBook is Storage, Admin, ReentrancyGuardUpgradeable {
         }
         OrderType orderType = LibOrder.getOrderType(orderData);
         require(orderType == OrderType.LiquidityOrder, "TYP"); // order TYPe mismatch
-        uint256 mlpAmount = LibOrderBook.fillLiquidityOrder(
+        uint256 blpAmount = LibOrderBook.fillLiquidityOrder(
             _storage,
             _blockTimestamp(),
             assetPrice,
-            mlpPrice,
+            blpPrice,
             currentAssetValue,
             targetAssetValue,
             orderData
@@ -369,9 +369,9 @@ contract OrderBook is Storage, Admin, ReentrancyGuardUpgradeable {
             try
                 ILiquidityCallback(order.account).afterFillLiquidityOrder{ gas: _callbackGasLimit() }(
                     order,
-                    mlpAmount,
+                    blpAmount,
                     assetPrice,
-                    mlpPrice,
+                    blpPrice,
                     currentAssetValue,
                     targetAssetValue
                 )
@@ -501,7 +501,7 @@ contract OrderBook is Storage, Admin, ReentrancyGuardUpgradeable {
             address collateralAddress = _storage.pool.getAssetAddress(order.assetId);
             LibOrderBook._transferOut(_storage, collateralAddress, order.account, order.rawAmount);
         } else {
-            _storage.mlp.safeTransfer(order.account, order.rawAmount);
+            _storage.blp.safeTransfer(order.account, order.rawAmount);
         }
         if (_storage.callbackWhitelist[order.account]) {
             try

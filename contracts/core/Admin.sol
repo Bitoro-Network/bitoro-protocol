@@ -157,13 +157,13 @@ contract Admin is Storage {
         _updateSequence();
     }
 
-    function setEmergencyNumbers(uint96 newMlpPriceLowerBound, uint96 newMlpPriceUpperBound) external onlyMaintainer {
+    function setEmergencyNumbers(uint96 newBlpPriceLowerBound, uint96 newBlpPriceUpperBound) external onlyMaintainer {
         if (
-            _storage.mlpPriceLowerBound != newMlpPriceLowerBound || _storage.mlpPriceUpperBound != newMlpPriceUpperBound
+            _storage.blpPriceLowerBound != newBlpPriceLowerBound || _storage.blpPriceUpperBound != newBlpPriceUpperBound
         ) {
-            _storage.mlpPriceLowerBound = newMlpPriceLowerBound;
-            _storage.mlpPriceUpperBound = newMlpPriceUpperBound;
-            emit SetMlpPriceRange(newMlpPriceLowerBound, newMlpPriceUpperBound);
+            _storage.blpPriceLowerBound = newBlpPriceLowerBound;
+            _storage.blpPriceUpperBound = newBlpPriceUpperBound;
+            emit SetBlpPriceRange(newBlpPriceLowerBound, newBlpPriceUpperBound);
         }
         _updateSequence();
     }

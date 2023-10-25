@@ -49,9 +49,9 @@
     "name": "PeggedBtc",
     "address": "0x50b7545627a5162F82A992c33b87aDc75187B218"
   },
-  "PeggedMlp": {
+  "PeggedBlp": {
     "type": "preset",
-    "name": "PeggedMlp",
+    "name": "PeggedBlp",
     "address": "0xAf2D365e668bAaFEdcFd256c0FBbe519e594E390"
   },
   "PeggedBitoroUsd": {

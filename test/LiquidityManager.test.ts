@@ -10,7 +10,7 @@ const B = ethers.BigNumber
 
 describe("LiquidityManager", () => {
   let pool: Contract
-  let mlp: Contract
+  let blp: Contract
   let tokenA: Contract
   let tokenB: Contract
   let tokenC: Contract
@@ -41,7 +41,7 @@ describe("LiquidityManager", () => {
     tokenD = await createContract("MockERC20", ["TokenB", "TokenB", 18])
     tokenE = await createContract("MockERC20", ["TokenB", "TokenB", 6])
 
-    mlp = await createContract("MockERC20", ["MLP", "MLP", 18])
+    blp = await createContract("MockERC20", ["BLP", "BLP", 18])
     pool = await createContract("MockLiquidityPool")
     // assets
     await pool.setAssetAddress(0, tokenA.address)

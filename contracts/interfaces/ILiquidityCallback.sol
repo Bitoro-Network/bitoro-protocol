@@ -7,7 +7,7 @@ interface ILiquidityCallback {
     function beforeFillLiquidityOrder(
         LiquidityOrder calldata order,
         uint96 assetPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
     ) external returns (bool);
@@ -16,7 +16,7 @@ interface ILiquidityCallback {
         LiquidityOrder calldata order,
         uint256 outAmount,
         uint96 assetPrice,
-        uint96 mlpPrice,
+        uint96 blpPrice,
         uint96 currentAssetValue,
         uint96 targetAssetValue
     ) external;

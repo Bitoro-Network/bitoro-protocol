@@ -5,9 +5,17 @@ import "@nomiclabs/hardhat-waffle"
 import "@nomiclabs/hardhat-etherscan"
 //import "solidity-coverage"
 //import "hardhat-gas-reporter"
+import * as dotenv from 'dotenv';
+// Load environment variables from .env file into process.env
+dotenv.config();
+
 import { retrieveLinkReferences } from "./scripts/deployer/linkReferenceParser"
 
-const etherscanApiKey = process.env["ETHERSCAN_API_KEY"]
+const {
+  DEPLOYER_PRIV_KEY: privKey,
+  ARBISCAN_MAIN_API_KEY: arbitrumOne,
+  ARBISCAN_GOERLI_API_KEY: arbitrumGoerli
+} = process.env
 
 task("deploy", "Deploy a single contract")
   .addPositionalParam("name", "Name of contract to deploy")
@@ -47,16 +55,16 @@ task("deploy", "Deploy a single contract")
   })
 
 module.exports = {
-  defaultNetwork: "hardhat",
+  defaultNetwork: "arb1",
   networks: {
     hardhat: {
       allowUnlimitedContractSize: true,
     },
     arb1: {
       url: `https://arb1.arbitrum.io/rpc`,
-      gasPrice: 2e9,
-      blockGasLimit: "80000000",
-      accounts: [],
+      // gasPrice: 2e9,
+      // blockGasLimit: "80000000",
+      accounts: [privKey],
     },
     arbGoerli: {
       url: `https://arb-goerli.g.alchemy.com/v2/2mNlhhYJxcMYdgUWZU7gx9yFZ8ZOmyz_`,
@@ -112,7 +120,10 @@ module.exports = {
     artifacts: "./artifacts",
   },
   etherscan: {
-    apiKey: etherscanApiKey,
+    apiKey: {
+      arbitrumOne,
+      arbitrumGoerli
+    },
   },
   mocha: {
     timeout: 60000,
