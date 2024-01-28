@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx hardhat compile",
     "size": "npx hardhat size-contracts",
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "balance": "npx hardhat balances --network snowtrace"
   },
   "author": "",
   "license": "UNLICENSED",

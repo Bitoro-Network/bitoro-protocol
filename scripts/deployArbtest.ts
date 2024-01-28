@@ -16,7 +16,7 @@ const ENV: DeploymentOptions = {
   artifactDirectory: "./artifacts/contracts",
   addressOverride: {
     // ArbRinkeby
-    ProxyAdmin: { address: "0x1D34658aD1259F515246335A11372Fe51330999d" },
+    ProxyAdmin: { address: "0xEd594Fee4Ab06cB8BFCB52293A74aD9db3e4C778" },
     WETH9: { address: "0xB47e6A5f8b33b3F17603C83a0535A9dcD7E32681" },
     DemoBridge: { address: "0x505F6EB30251097929c6a89d89F812A270bb098b" },
   },
@@ -236,70 +236,71 @@ function getOrderId(receipt: ContractReceipt): string {
 }
 
 async function main(deployer: Deployer) {
-  const accounts = await ethers.getSigners()
-  if (accounts.length < 3) {
-    throw new Error("this script needs 3 accounts: deployer, broker, lp")
-  }
+  // const accounts = await ethers.getSigners()
+  // if (accounts.length < 3) {
+  //   throw new Error("this script needs 3 accounts: deployer, broker, lp")
+  // }
 
   // deploy
   let proxyAdmin = deployer.addressOf("ProxyAdmin")
-  const weth9: MockERC20 = await deployer.getDeployedContract("MockERC20", "WETH9")
-  const blpToken: BlpToken = await deployer.deployUpgradeableOrSkip("BlpToken", "Blp", proxyAdmin)
+  console.log('proxyAdmin: ', proxyAdmin)
+  // const weth9: MockERC20 = await deployer.getDeployedContract("MockERC20", "WETH9")
+  // const blpToken: BlpToken = await deployer.deployUpgradeableOrSkip("BlpToken", "Blp", proxyAdmin)
   await deployer.deployUpgradeableOrSkip("LiquidityPoolHop1", "LiquidityPool", proxyAdmin)
   const poolHop2: Contract = await deployer.deployOrSkip("LiquidityPoolHop2", "LiquidityPoolHop2")
   const pool: LiquidityPool = await deployer.getDeployedContract("LiquidityPool", "LiquidityPool")
-  const orderBook: OrderBook = await deployer.deployUpgradeableOrSkip("OrderBook", "OrderBook", proxyAdmin)
-  await deployer.deployUpgradeableOrSkip("LiquidityManager", "LiquidityManager", proxyAdmin)
-  const liquidityManager = await deployer.getDeployedContract("LiquidityManager", "LiquidityManager")
-  const reader: Reader = await deployer.deployOrSkip("Reader", "Reader", pool.address, blpToken.address, liquidityManager.address, orderBook.address, [
-    accounts[0].address, // deployer's bitoro tokens are not debt
-  ])
-  const nativeUnwrapper: NativeUnwrapper = await deployer.deployOrSkip("NativeUnwrapper", "NativeUnwrapper", weth9.address)
-  const vault: Vault = await deployer.deployUpgradeableOrSkip("Vault", "Vault", proxyAdmin)
-  const bitoroUsd: BitoroToken = await deployer.deployOrSkip("BitoroToken", "BitoroUsd")
-  const bitoroWeth: BitoroToken = await deployer.deployOrSkip("BitoroToken", "BitoroWeth")
+  // const orderBook: OrderBook = await deployer.deployUpgradeableOrSkip("OrderBook", "OrderBook", proxyAdmin)
+  // await deployer.deployUpgradeableOrSkip("LiquidityManager", "LiquidityManager", proxyAdmin)
+  // const liquidityManager = await deployer.getDeployedContract("LiquidityManager", "LiquidityManager")
+  // const reader: Reader = await deployer.deployOrSkip("Reader", "Reader", pool.address, blpToken.address, liquidityManager.address, orderBook.address, [
+  //   accounts[0].address, // deployer's bitoro tokens are not debt
+  // ])
+  // const nativeUnwrapper: NativeUnwrapper = await deployer.deployOrSkip("NativeUnwrapper", "NativeUnwrapper", weth9.address)
+  // const vault: Vault = await deployer.deployUpgradeableOrSkip("Vault", "Vault", proxyAdmin)
+  // const bitoroUsd: BitoroToken = await deployer.deployOrSkip("BitoroToken", "BitoroUsd")
+  // const bitoroWeth: BitoroToken = await deployer.deployOrSkip("BitoroToken", "BitoroWeth")
 
-  // init
-  console.log("init")
-  await ensureFinished(blpToken.initialize("BITORO LP", "BITOROLP" + TOKEN_POSTFIX))
-  await ensureFinished(bitoroUsd.initialize("BITORO Token for USD", "bitoroUSD" + TOKEN_POSTFIX))
-  await ensureFinished(bitoroWeth.initialize("BITORO Token for WETH", "bitoroWETH" + TOKEN_POSTFIX))
-  await ensureFinished(pool.initialize(poolHop2.address, blpToken.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address))
-  await ensureFinished(orderBook.initialize(pool.address, blpToken.address, weth9.address, nativeUnwrapper.address))
-  await orderBook.addBroker(accounts[1].address)
-  await orderBook.addBroker(keeperAddress)
-  await orderBook.setLiquidityLockPeriod(5 * 60)
-  await orderBook.setOrderTimeout(300, 86400 * 365)
-  await ensureFinished(liquidityManager.initialize(vault.address, pool.address))
-  // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
-  await pool.setNumbers(3600 * 8, rate("0.0025"), rate("0.005"), rate("0.01"), toWei("0"))
-  // blpPrice, blpPrice
-  await pool.setEmergencyNumbers(toWei("0.5"), toWei("1.1"))
-  await pool.setLiquidityManager(liquidityManager.address, true)
-  await ensureFinished(nativeUnwrapper.addWhiteList(pool.address))
-  await ensureFinished(nativeUnwrapper.addWhiteList(orderBook.address))
-  await ensureFinished(vault.initialize())
+  // // init
+  // console.log("init")
+  // await ensureFinished(blpToken.initialize("BITORO LP", "BITOROLP" + TOKEN_POSTFIX))
+  // await ensureFinished(bitoroUsd.initialize("BITORO Token for USD", "bitoroUSD" + TOKEN_POSTFIX))
+  // await ensureFinished(bitoroWeth.initialize("BITORO Token for WETH", "bitoroWETH" + TOKEN_POSTFIX))
+  // await ensureFinished(pool.initialize(poolHop2.address, blpToken.address, orderBook.address, weth9.address, nativeUnwrapper.address, vault.address))
+  // await ensureFinished(orderBook.initialize(pool.address, blpToken.address, weth9.address, nativeUnwrapper.address))
+  // await orderBook.addBroker(accounts[1].address)
+  // await orderBook.addBroker(keeperAddress)
+  // await orderBook.setLiquidityLockPeriod(5 * 60)
+  // await orderBook.setOrderTimeout(300, 86400 * 365)
+  // await ensureFinished(liquidityManager.initialize(vault.address, pool.address))
+  // // fundingInterval, liqBase, liqDyn, σ_strict, brokerGas
+  // await pool.setNumbers(3600 * 8, rate("0.0025"), rate("0.005"), rate("0.01"), toWei("0"))
+  // // blpPrice, blpPrice
+  // await pool.setEmergencyNumbers(toWei("0.5"), toWei("1.1"))
+  // await pool.setLiquidityManager(liquidityManager.address, true)
+  // await ensureFinished(nativeUnwrapper.addWhiteList(pool.address))
+  // await ensureFinished(nativeUnwrapper.addWhiteList(orderBook.address))
+  // await ensureFinished(vault.initialize())
 
-  console.log("transfer blp")
-  await blpToken.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 97, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 4002, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 43113, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // console.log("transfer blp")
+  // await blpToken.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 97, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 4002, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 43113, blpToken.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
 
-  console.log("transfer bitoroUsd")
-  await bitoroUsd.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await bitoroWeth.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 97, bitoroUsd.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 97, bitoroWeth.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 4002, bitoroUsd.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 4002, bitoroWeth.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 43113, bitoroUsd.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
-  await transferThroughDemoBridge(deployer, accounts[0], 43113, bitoroWeth.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // console.log("transfer bitoroUsd")
+  // await bitoroUsd.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await bitoroWeth.transfer(pool.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 97, bitoroUsd.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 97, bitoroWeth.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 4002, bitoroUsd.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 4002, bitoroWeth.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 43113, bitoroUsd.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
+  // await transferThroughDemoBridge(deployer, accounts[0], 43113, bitoroWeth.address, toWei("10000000000000000")) // < toWei(PreMinedTokenTotalSupply)
 
-  // presets
-  await faucet(deployer)
-  await preset1(deployer)
-  await addLiq(deployer)
+  // // presets
+  // await faucet(deployer)
+  // await preset1(deployer)
+  // await addLiq(deployer)
 }
 
 restorableEnviron(ENV, main)

@@ -1,0 +1,45 @@
+{
+  "ProxyAdmin": {
+    "type": "preset",
+    "name": "ProxyAdmin",
+    "address": "0xEd594Fee4Ab06cB8BFCB52293A74aD9db3e4C778"
+  },
+  "WETH9": {
+    "type": "preset",
+    "name": "WETH9",
+    "address": "0xB47e6A5f8b33b3F17603C83a0535A9dcD7E32681"
+  },
+  "DemoBridge": {
+    "type": "preset",
+    "name": "DemoBridge",
+    "address": "0x505F6EB30251097929c6a89d89F812A270bb098b"
+  },
+  "LiquidityPoolHop1__implementation": {
+    "type": "plain",
+    "name": "LiquidityPoolHop1__implementation",
+    "address": "0x360eF9b0C60DfAe93B24FacAfe38f844d98C10AD",
+    "deployedAt": 40170962
+  },
+  "LiquidityPool": {
+    "type": "upgradeable",
+    "name": "LiquidityPool",
+    "address": "0x30D9904619cF718CeBdc9822DF3Bb71006aa02b0",
+    "dependencies": {
+      "admin": "0xEd594Fee4Ab06cB8BFCB52293A74aD9db3e4C778",
+      "implementation": "0x360eF9b0C60DfAe93B24FacAfe38f844d98C10AD"
+    },
+    "deployedAt": 40170968
+  },
+  "LibLiquidity": {
+    "type": "plain",
+    "name": "LibLiquidity",
+    "address": "0x2EB86e90406647f1019b56E043aF7ffb673f6846",
+    "deployedAt": 40170973
+  },
+  "LiquidityPoolHop2": {
+    "type": "plain",
+    "name": "LiquidityPoolHop2",
+    "address": "0xd718D90100290e3b2F052AB924f8639B5d27bF80",
+    "deployedAt": 40170977
+  }
+}
